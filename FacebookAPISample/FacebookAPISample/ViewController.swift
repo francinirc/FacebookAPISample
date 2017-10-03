@@ -8,6 +8,7 @@
 
 import UIKit
 import FacebookLogin
+import FacebookCore
 
 
 class ViewController: UIViewController {
@@ -15,10 +16,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let loginButton = LoginButton(readPermissions: [ .publicProfile ])
-        loginButton.center = view.center
+        // if user is logged in, go to next view, else request for login
+        if let accessToken = AccessToken.current {
+            print(accessToken.userId)
+        } else {
+            let loginButton = LoginButton(readPermissions: [ .publicProfile, .email, .userFriends ])
+            loginButton.center = view.center
+            
+            view.addSubview(loginButton)
+        }
         
-        view.addSubview(loginButton)
     }
 
     override func didReceiveMemoryWarning() {
